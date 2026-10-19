@@ -1,0 +1,104 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card text-bg-primary h-100">
+            <div class="card-body">
+                <div>Today's Sales</div>
+                <h3>Rs @Model.TodaySales.ToString("N0")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-success h-100">
+            <div class="card-body">
+                <div>Total Orders</div>
+                <h3>@Model.TotalOrders</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-info h-100">
+            <div class="card-body">
+                <div>Products</div>
+                <h3>@Model.TotalProducts</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-secondary h-100">
+            <div class="card-body">
+                <div>Customers</div>
+                <h3>@Model.TotalCustomers</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Sales - last 7 days</h5>
+                <canvas id="salesChart" height="140"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Low stock warning</h5>
+
+                @if (Model.LowStockProducts.Count == 0)
+                {
+                    <p class="text-muted mb-0">All products have enough stock.</p>
+                }
+                else
+                {
+
+                    <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr><th>Product</th><th>Category</th><th class="text-end">Stock</th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model.LowStockProducts)
+                            {
+                                <tr>
+                                    <td>@product.Name</td>
+                                    <td>@product.Category.Name</td>
+                                    <td class="text-end"><span class="badge text-bg-danger">@product.StockQuantity</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+        new Chart(document.getElementById('salesChart'), {
+            type: 'bar',
+            data: {
+                labels: @Json.Serialize(Model.SalesLabels),
+                datasets: [{
+                    label: 'Sales (Rs)',
+                    data: @Json.Serialize(Model.SalesValues),
+                    backgroundColor: '#0d6efd'
+                }]
+            },
+            options: { plugins: { legend: { display: false } } }
+        });
+    </script>
+}
