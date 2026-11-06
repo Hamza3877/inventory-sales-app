@@ -6,18 +6,27 @@ Built with ASP.NET Core MVC (one single application, a "monolith"), SQL Server a
 A web app for a shop or small factory to manage products, stock, customers and sales orders in one place.
 
 What it does
+
 • Dashboard: today's sales, totals, a 7-day sales chart and a low-stock warning list
+
 • Products, Categories and Customers: add, edit, search, and pages for long lists
+
 • New order: choose a customer and products. The total is calculated and the stock goes down automatically, and the order is refused if there is not enough stock
+
 • Invoice page with Print / Save as PDF, and export of all orders to Excel
 
 Roles
+
 • Admin: full access, including delete
+
 • Staff: can create and edit products, customers and orders, but cannot delete anything
+
 Login uses ASP.NET Core Identity, and the roles are checked on the server.
 
 How it is built
+
 ASP.NET Core MVC (.NET 10), C#, Entity Framework Core, SQL Server, ASP.NET Core Identity, Bootstrap 5, ClosedXML (Excel export), xUnit.
+
 Structure: Controller → Service → Repository → Database. The order rules (check stock, reduce stock, calculate total, save together) live in one service class, so I could unit test them without a database.
 
 ## What it does
