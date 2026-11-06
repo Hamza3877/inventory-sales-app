@@ -5,6 +5,8 @@ Built with ASP.NET Core MVC (one single application, a "monolith"), SQL Server a
 
 A web app for a shop or small factory to manage products, stock, customers and sales orders in one place.
 
+Live Preview;- https://inventory-sales-app.tryasp.net/
+
 What it does
 
 • Dashboard: today's sales, totals, a 7-day sales chart and a low-stock warning list
