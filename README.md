@@ -1,7 +1,24 @@
-# Inventory & Sales Manager
+# Inventory & Sales Manager – ASP.NET Core MVC, SQL Server, Bootstrap
 
 A web app for a shop or factory to manage **products, stock, customers and sales orders**, and to print invoices.
 Built with ASP.NET Core MVC (one single application, a "monolith"), SQL Server and Bootstrap.
+
+A web app for a shop or small factory to manage products, stock, customers and sales orders in one place.
+
+What it does
+• Dashboard: today's sales, totals, a 7-day sales chart and a low-stock warning list
+• Products, Categories and Customers: add, edit, search, and pages for long lists
+• New order: choose a customer and products. The total is calculated and the stock goes down automatically, and the order is refused if there is not enough stock
+• Invoice page with Print / Save as PDF, and export of all orders to Excel
+
+Roles
+• Admin: full access, including delete
+• Staff: can create and edit products, customers and orders, but cannot delete anything
+Login uses ASP.NET Core Identity, and the roles are checked on the server.
+
+How it is built
+ASP.NET Core MVC (.NET 10), C#, Entity Framework Core, SQL Server, ASP.NET Core Identity, Bootstrap 5, ClosedXML (Excel export), xUnit.
+Structure: Controller → Service → Repository → Database. The order rules (check stock, reduce stock, calculate total, save together) live in one service class, so I could unit test them without a database.
 
 ## What it does
 
@@ -20,59 +37,9 @@ Built with ASP.NET Core MVC (one single application, a "monolith"), SQL Server a
 - Admin: `admin@demo.com` / `Admin@123`
 - Staff: `staff@demo.com` / `Staff@123`
 
-## How to run (Visual Studio)
+## Screenshots
 
-1. Install **Visual Studio 2022 or newer** with the **ASP.NET and web development** workload, and the **.NET 10 SDK**.
-   (SQL Server LocalDB is installed with that workload.)
-2. Open `InventorySales.sln`.
-3. Press **F5** (or the green "https" button).
-4. The first start creates the database `InventorySalesDb` and the demo data by itself. Then log in.
+![Dashboard](docs/screenshots/1.png)
+![Products](docs/screenshots/2.png)
 
-### If your SQL Server is not LocalDB
-Open `InventorySales/appsettings.json` and change the connection string, for example for SQL Server Express:
 
-`Server=.\\SQLEXPRESS;Database=InventorySalesDb;Trusted_Connection=True;TrustServerCertificate=True`
-
-### If you only have .NET 8
-In both `.csproj` files change `net10.0` to `net8.0`, and change `10.0.*` to `8.0.*` in the package lines. Nothing else changes.
-
-### Run the tests
-Visual Studio menu: **Test > Run All Tests** (4 tests for the order rules). Or in a terminal: `dotnet test`.
-
-## Folder map (easy to explain)
-
-```
-Models/         The tables: Category, Product, Customer, Order, OrderItem
-Data/           AppDbContext (database setup) and DbSeeder (demo data)
-Repositories/   The only place that talks to the database tables
-Services/       Business rules: OrderService (create order, check stock), DashboardService
-Controllers/    Receive the browser request, call a repository or service, return a View
-Views/          The HTML pages (Razor)
-ViewModels/     Small classes that carry data to a screen
-```
-
-Request flow: **Browser -> Controller -> Service / Repository -> Database**, then the Controller returns a **View**.
-
-## Key points to explain to HR / interviewers
-
-- **MVC:** Model = data, View = page, Controller = the traffic manager between them.
-- **Repository pattern:** controllers never write database queries. They ask a repository. One generic `Repository<T>` handles the simple tables; `ProductRepository` and `OrderRepository` add extra queries.
-- **Service layer:** the rule "check stock, reduce stock, calculate total, save everything together" lives in `OrderService`, so it is easy to test. That is why the unit tests exist.
-- **Entity Framework Core (Code First) + Fluent API:** tables are created from the C# classes; `AppDbContext` sets rules like decimal precision and "a product that was sold cannot be deleted".
-- **Security:** ASP.NET Identity login, roles (Admin/Staff), anti-forgery tokens on forms, `[Authorize]` on every screen.
-- **Monolith:** one application, one database, one deployment. Simple and right for a small business app.
-
-## Using real EF Core Migrations (instead of EnsureCreated)
-
-The app uses `EnsureCreatedAsync()` in `Data/DbSeeder.cs` so it runs with zero setup. To use migrations (what many companies do):
-
-1. Delete the database `InventorySalesDb` (SQL Server Object Explorer, right-click, Delete).
-2. In **Package Manager Console** (set default project to `InventorySales`): `Add-Migration InitialCreate`
-3. In `Data/DbSeeder.cs` replace `EnsureCreatedAsync()` with `MigrateAsync()`.
-4. Run the app. The migration creates the database.
-
-## Free hosting ideas
-
-- Push the code to GitHub.
-- Free .NET + SQL Server hosts change their plans often (for example MonsterASP.NET or Somee). Check the current free plan, then use that host's "publish" instructions.
-- Also record a 2-minute screen video of the app as a backup for recruiters.
