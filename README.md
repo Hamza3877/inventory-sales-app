@@ -2,7 +2,7 @@
 
 A web app for a small shop or factory to keep track of products, stock, customers and sales orders, and to print an invoice for each sale.
 
-I built it to practise how a real business system fits together, from login to invoice, instead of making another list-and-form demo. The part I care about most: when you save an order, the total is calculated and the stock goes down in the same step, and if anything fails nothing is saved.
+I built it to how a real business system fits together, from login to invoice. The part I care about most: when you save an order, the total is calculated and the stock goes down in the same step, and if anything fails nothing is saved.
 
 
 | Role | Email | Password |
@@ -70,6 +70,7 @@ Live Preview;- https://inventory-sales-app.tryasp.net/
 **Login.** Login Screen.
 
 ![Login](docs/screenshots/login.png)
+
 
 ## Who can do what
 
