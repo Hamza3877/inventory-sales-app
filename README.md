@@ -20,13 +20,16 @@ Live Preview;- https://inventory-sales-app.tryasp.net/
 
 ![Dashboard](docs/screenshots/1.png)
 
+
 **New order.** Pick a customer and the products. The total and the new stock are worked out when you save.
 
 ![New order](docs/screenshots/new-order.png)
 
+
 **Invoice.** Each order has an invoice page you can print or save as PDF.
 
 ![Invoice](docs/screenshots/invoice.png)
+
 
 **Products.** Search by product or category, with pages for long lists.
 
