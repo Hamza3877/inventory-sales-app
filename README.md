@@ -67,11 +67,6 @@ Live Preview;- https://inventory-sales-app.tryasp.net/
 
 
 
-**Login.** Login Screen.
-
-![Login](docs/screenshots/login.png)
-
-
 ## Who can do what
 
 | | Admin | Staff |
