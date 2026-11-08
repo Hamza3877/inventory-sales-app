@@ -55,67 +55,75 @@ Structure: Controller → Service → Repository → Database. The order rules (
 
 
 
-
-
 # Inventory & Sales Manager
 
-A web app for a small shop or factory to keep track of what it sells: products and stock, customers and sales orders. When an order is saved the stock goes down by itself, and the order can be printed as an invoice.
+A web app for a small shop or factory to keep track of products, stock, customers and sales orders, and to print an invoice for each sale.
 
-I built it as one ASP.NET Core MVC application on SQL Server. I wanted to show how a normal business app fits together (login, roles, business rules, a database that protects its own data), not only add, edit and delete pages.
+I built it to practise how a real business system fits together, from login to invoice, instead of making another list-and-form demo. The part I care about most: when you save an order, the total is calculated and the stock goes down in the same step, and if anything fails nothing is saved.
 
 **Live demo:** [paste link]
-It runs on a free plan, so the first visit can take up to a minute to wake up.
+(It runs on a free plan, so the first visit can take up to a minute to wake up.)
 
 | Role | Email | Password |
 |---|---|---|
 | Admin | admin@demo.com | Admin@123 |
 | Staff | staff@demo.com | Staff@123 |
 
+## Screenshots
+
+**Dashboard.** Today's sales, totals, the last 7 days as a chart, and a list of products running low.
+![Dashboard](docs/screenshots/dashboard.png)
+
+**New order.** Pick a customer and the products. The total and the new stock are worked out when you save.
+![New order](docs/screenshots/new-order.png)
+
+**Invoice.** Each order has an invoice page you can print or save as PDF.
+![Invoice](docs/screenshots/invoice.png)
+
+**Products.** Search by product or category, with pages for long lists.
+![Products](docs/screenshots/products.png)
+
 ## Who can do what
 
 | | Admin | Staff |
 |---|---|---|
-| See the dashboard, products, customers, orders | Yes | Yes |
+| View dashboard, products, categories, customers, orders | Yes | Yes |
 | Add and edit products, categories, customers | Yes | Yes |
-| Create orders and print invoices | Yes | Yes |
+| Create orders, print invoices, export to Excel | Yes | Yes |
 | Delete products, categories, customers | Yes | No |
 
-The roles are checked on the server, so a Staff user cannot delete something by typing the address in the browser.
+Orders cannot be deleted by anyone. A sale is a record, so I did not want it to disappear. The same idea protects data: a category that still has products, a customer who has orders, or a product that was sold cannot be deleted.
+
+The roles are checked on the server, not only hidden in the menu, so Staff cannot delete by typing the address.
 
 ## Screens
 
-**Dashboard.** The first page after login. It shows today's sales, totals, a chart of the last 7 days and a list of products that are running low.
-![Dashboard](docs/screenshots/dashboard.png)
-
-**Products.** Search by product or category, page through the list, add and edit. Only Admin sees the Delete button.
-![Products](docs/screenshots/products.png)
-
-**New order.** Choose a customer and fill in the product rows. The total is worked out automatically and the stock goes down when the order is saved.
-![New order](docs/screenshots/new-order.png)
-
-**Invoice.** Every order has an invoice page that can be printed or saved as PDF. All orders can also be exported to Excel.
-![Invoice](docs/screenshots/invoice.png)
+- **Login:** email and password, using ASP.NET Core Identity.
+- **Dashboard:** sales today, totals, a 7-day sales chart, and products with fewer than 10 in stock.
+- **Products:** list, search, add, edit, delete (Admin).
+- **Categories:** add, edit, delete (Admin).
+- **Customers:** search, add, edit, delete (Admin).
+- **New order:** choose a customer, fill in the product rows you need (empty rows are ignored).
+- **Orders:** all orders, newest first, with an invoice page and an Excel export.
 
 ## How an order is saved
 
-This is the part I spent the most time on, because a wrong stock number is a real business problem.
+All the rules are in one class, `Services/OrderService.cs`, not in the controller:
 
-- Empty rows are ignored, and the same product on two rows is added together.
-- If any product does not have enough stock, the whole order is refused with a clear message.
-- The price is copied into the order, so old invoices don't change when a product price changes later.
-- The order and the new stock are saved together. If something fails, nothing is saved.
-- The database also blocks deleting a category that has products, a customer that has orders, or a product that was already sold.
+1. Keep only the filled rows, and merge the same product if it appears twice.
+2. Check that the customer exists.
+3. Check that there is enough stock for every row. If not, show a clear message and save nothing.
+4. Build the order, using the product price at that moment, and reduce the stock.
+5. Save the order and the new stock together in one go.
 
-Four unit tests cover these rules.
+The price is copied into the order, so old invoices don't change when a product price changes later.
 
 ## Tech stack
 
-ASP.NET Core MVC (.NET 10), C#, Entity Framework Core, SQL Server, ASP.NET Core Identity (login and roles), Bootstrap 5, ClosedXML (Excel export), xUnit.
+- ASP.NET Core MVC on .NET 10, C#
+- Entity Framework Core with SQL Server (Code First, Fluent API)
+- ASP.NET Core Identity for login and roles
+- Bootstrap 5 for the layout, Chart.js for the sales chart
+- ClosedXML for the Excel export
+- xUnit tests for the order rules
 
-## How the code is organised
-
-Controller, then Service or Repository, then Database. Controllers only receive the request and return a page. The order rules live in `OrderService`. Database queries live in the repositories.
-
-## What I would add next
-
-Paging on the orders list, order cancellation with stock restore, and a REST API for a mobile app.
