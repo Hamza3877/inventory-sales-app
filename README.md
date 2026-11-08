@@ -21,6 +21,41 @@ Live Preview;- https://inventory-sales-app.tryasp.net/
 ![Dashboard](docs/screenshots/1.png)
 
 
+**Products.** Search by product or category, with pages for long lists,add,edit and delete products.
+
+![Products](docs/screenshots/2.png)
+
+
+**New Product.** New Product add with category.
+
+![New Product](docs/screenshots/addproduct.png)
+
+
+**Category.** Category Screen.
+
+![Category](docs/screenshots/categoryscreen.png)
+
+
+**Add Category.** Add Category Screen.
+
+![Add Category](docs/screenshots/addcategory.png)
+
+
+**Customer.** Customer Screen.
+
+![Customer](docs/screenshots/customerscreen.png)
+
+
+**Add Customer.** Add Customer Screen.
+
+![Add Customer](docs/screenshots/addcustomer.png)
+
+
+**Order.** Order Screen.
+
+![Order](docs/screenshots/orderscreen.png)
+
+
 **New order.** Pick a customer and the products. The total and the new stock are worked out when you save.
 
 ![New order](docs/screenshots/neworderadd.png)
@@ -28,17 +63,13 @@ Live Preview;- https://inventory-sales-app.tryasp.net/
 
 **Invoice.** Each order has an invoice page you can print or save as PDF.
 
-![Invoice](docs/screenshots/invoice.png)
+![Invoice](docs/screenshots/invoicescreen.png)
 
-
-**Products.** Search by product or category, with pages for long lists.
-
-![Products](docs/screenshots/2.png)
 
 
 **Login.** Login Screen.
 
-![Login](docs/login)
+![Login](docs/login.png)
 
 ## Who can do what
 
