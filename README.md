@@ -105,7 +105,7 @@ The price is copied into the order, so old invoices don't change when a product 
 - ASP.NET Core MVC on .NET 10, C#
 - Entity Framework Core with SQL Server (Code First, Fluent API)
 - ASP.NET Core Identity for login and roles
-- Bootstrap 5 for the layout, Chart.js for the sales chart
+- Bootstrap 5 for the layout, jQuery, Chart.js for the sales chart
 - ClosedXML for the Excel export
 - xUnit tests for the order rules
 
